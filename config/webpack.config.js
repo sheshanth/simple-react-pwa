@@ -621,6 +621,39 @@ module.exports = function(webpackEnv) {
             // a route with query params (e.g. auth callbacks).
             new RegExp('/[^/?]+\\.[^/]+$'),
           ],
+          skipWaiting: true,
+          runtimeCaching: [
+            {
+              urlPattern: new RegExp('(.*)bootstrap(.*)\.(?:css|js)'),
+              handler: 'CacheFirst',
+              options: {
+                cacheName: "bootstrap-cdn",
+                expiration: {
+                  maxEntries: 2
+                }
+              }
+            },
+            {
+              urlPattern: new RegExp('(.*)popper(.*)\.js'),
+              handler: 'CacheFirst',
+              options: {
+                cacheName: "popper-cdn",
+                expiration: {
+                  maxEntries: 1
+                }
+              }
+            },
+            {
+              urlPattern: new RegExp('(.*)jquery(.*)\.js'),
+              handler: 'CacheFirst',
+              options: {
+                cacheName: "jquery-cdn",
+                expiration: {
+                  maxEntries: 1
+                }
+              }
+            }
+          ]
         }),
       // TypeScript type checking
       useTypeScript &&
