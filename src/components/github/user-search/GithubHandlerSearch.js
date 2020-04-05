@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
+import './GithubHandlerSearch.scss';
 import RepoList from '../repo-list/RepoList'
 
 function GithubHandlerSearch() {
