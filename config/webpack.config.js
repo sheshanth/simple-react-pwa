@@ -655,6 +655,17 @@ module.exports = function(webpackEnv) {
                   maxAgeSeconds: 30 * 24 * 60 * 60
                 }
               }
+            },
+            {
+              urlPattern: new RegExp('(.*)github\.com\/users\/(.*)'),
+              handler: 'StaleWhileRevalidate',
+              options: {
+                cacheName: 'github-repo',
+                expiration: {
+                  maxEntries: 2,
+                  maxAgeSeconds: 12 * 60 * 60
+                }
+              }
             }
           ]
         }),
