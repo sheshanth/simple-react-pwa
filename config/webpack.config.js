@@ -629,7 +629,8 @@ module.exports = function(webpackEnv) {
               options: {
                 cacheName: "bootstrap-cdn",
                 expiration: {
-                  maxEntries: 2
+                  maxEntries: 2,
+                  maxAgeSeconds: 30 * 24 * 60 * 60
                 }
               }
             },
@@ -639,7 +640,8 @@ module.exports = function(webpackEnv) {
               options: {
                 cacheName: "popper-cdn",
                 expiration: {
-                  maxEntries: 1
+                  maxEntries: 1,
+                  maxAgeSeconds: 30 * 24 * 60 * 60
                 }
               }
             },
@@ -649,7 +651,8 @@ module.exports = function(webpackEnv) {
               options: {
                 cacheName: "jquery-cdn",
                 expiration: {
-                  maxEntries: 1
+                  maxEntries: 1,
+                  maxAgeSeconds: 30 * 24 * 60 * 60
                 }
               }
             }
