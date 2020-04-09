@@ -1,6 +1,6 @@
 ## `using the application features`
 
- 1. **Installable**
+ 1. **Installable**<br/>
 		**For Desktop and Laptop**
 		Open url [https://simple-react-pwa.web.app](https://simple-react-pwa.web.app) in the browser (google chrome on any platform should work good). Click the 3 dots on the chrome address bar and click on `install simple-react-app`. A popup should appear, click on install that confirms installing the application.
 		After installing you should see the application installed in the desktop. Open the application installed to get native experience.<br/>
