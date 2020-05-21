@@ -26,7 +26,7 @@ function GithubHandlerSearch() {
         <label htmlFor="githubHandler">Github Handler:</label>
         <input type="text" className="form-control col-sm-12 col-md-5" defaultValue={githubHandler} 
           ref={register(registerOptions)} id="githubHandler" name="githubHandler" placeholder="Enter Github Handler" />
-          { errors.githubHandler && 'Github handler required' }
+          { errors.githubHandler && <div className="text-danger">Github handler required</div> }
         </div>
       </form>
       <hr/>

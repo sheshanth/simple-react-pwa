@@ -22,11 +22,13 @@ function RepoList({ githubHandler }) {
   }) : <h6>No repos found or check the user handler</h6>
 
   useEffect(() => {
-    fetch(`https://api.github.com/users/${githubHandler}/repos`)
+    const controller = new AbortController()
+    fetch(`https://api.github.com/users/${githubHandler}/repos`, { signal: controller.signal })
       .then(validateResponse)
       .then(responseAsJson)
       .then(setRepos)
       .catch(console.error)
+    return () => controller.abort()
   }, [githubHandler])
 
 
