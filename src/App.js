@@ -15,7 +15,7 @@ function App() {
           <div className="routes container">
             <Route path="/github" component={GithubHandlerSearch} />
             <Route path="/sync" component={Posts} />
-            <Route path="/" render={() => <Redirect to='/github' />} />
+            <Route exact path="/" render={() => <Redirect to='/github' />} />
           </div>
         </Router>
       </div>

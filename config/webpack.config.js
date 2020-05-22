@@ -666,6 +666,19 @@ module.exports = function(webpackEnv) {
                   maxAgeSeconds: 12 * 60 * 60
                 }
               }
+            },
+            {
+              urlPattern: new RegExp('(.*)fast-cliffs-09680.herokuapp.com/posts/*'),
+              handler: "NetworkOnly",
+              options: {
+                backgroundSync: {
+                  name: 'fast-cliffs',
+                  options: {
+                    maxRetentionTime: 5
+                  }
+                }
+              },
+              method: 'POST'
             }
           ]
         }),
