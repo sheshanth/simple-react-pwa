@@ -6,6 +6,10 @@ import GithubHandlerSearch from './components/github/user-search/GithubHandlerSe
 import Navbar from './components/navbar/Navbar';
 import Posts from './components/bg-sync/Posts';
 
+window.addEventListener('online', () => {
+  window.location.reload()
+})
+
 function App() {
   return (
     <div className="App">

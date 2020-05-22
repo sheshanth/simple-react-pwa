@@ -4,6 +4,9 @@ import { useForm } from 'react-hook-form'
 import PostListComponent from './PostList';
 import './post.scss';
 
+const internetDisconnected = 'ERR_INTERNET_DISCONNECTED'
+const failedToFetch = 'Failed to fetch'
+
 function Posts() {
 
   const [post, setPost] = useState();
@@ -16,14 +19,21 @@ function Posts() {
     pattern: /^\S*$/
   }
 
-  const formSubmit = (data) => {
+  const formSubmit = async (data) => {
     const { post } = data
     setPost(post)
     if (post && typeof post === 'string') {
-      fetch(`https://fast-cliffs-09680.herokuapp.com/posts/${post}`, { method: 'POST' })
-        .then(() => {
-          setForceUpdate({})
-        })
+      try {
+        const response = await fetch(`https://fast-cliffs-09680.herokuapp.com/posts/${post}`, { method: 'POST' })
+        if (!(response.status === 201)) {
+          throw Error(internetDisconnected)
+        }
+        setForceUpdate({})
+      } catch (error) {
+        if (error.message === failedToFetch) {
+          window.alert(`${internetDisconnected}: request queued.`)
+        }
+      }
     }
   }
 
@@ -41,30 +51,41 @@ function Posts() {
         setPostList(data)
       } catch (error) {
         console.log(error)
+        if(error.message === failedToFetch) {
+          window.alert(`${internetDisconnected}: can't fetch.`)
+        }
       }
     }
     fetchData();
     return () => controller.abort()
   }, [forceUpdate])
 
-  const deletePost = (id) => {
-    fetch(`https://fast-cliffs-09680.herokuapp.com/posts/${id}`, { method: 'DELETE' })
-      .then(response => {
-        if (response.status === 202) {
-          setForceUpdate({})
-        }
-      })
-      .catch(console.error)
+  const deletePost = async (id) => {
+    try {
+      const response = await fetch(`https://fast-cliffs-09680.herokuapp.com/posts/${id}`, { method: 'DELETE' })
+      if (!(response.status === 202)) {
+        throw Error(internetDisconnected)
+      }
+      setForceUpdate({})
+    } catch (error) {
+      if (error.message === failedToFetch) {
+        window.alert(`${internetDisconnected}: Can't perform delete.`)
+      }
+    }
   }
 
-  const deleteAllPosts = () => {
-    fetch(`https://fast-cliffs-09680.herokuapp.com/posts`, { method: 'DELETE' })
-      .then(response => {
-        if (response.status === 202) {
-          setForceUpdate({})
-        }
-      })
-      .catch(console.error)
+  const deleteAllPosts = async () => {
+    try {
+      const response = await fetch(`https://fast-cliffs-09680.herokuapp.com/posts`, { method: 'DELETE' })
+      if (!(response.status === 202)) {
+        throw Error(internetDisconnected)
+      }
+      setForceUpdate({})
+    } catch (error) {
+      if (error.message === failedToFetch) {
+        window.alert(`${internetDisconnected}: Can't perform deleting all post.`)
+      }
+    }
   }
 
   return (
@@ -84,7 +105,7 @@ function Posts() {
         </div>
       </form>
       <hr />
-      {postList && postList.length !== 0 ? <PostListComponent list={postList} deletePost={deletePost} />:
+      {postList && postList.length !== 0 ? <PostListComponent list={postList} deletePost={deletePost} /> :
         <h5>No post</h5>}
     </div>
   )
