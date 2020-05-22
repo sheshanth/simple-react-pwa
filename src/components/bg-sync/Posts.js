@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import PostListComponent from './PostList';
@@ -9,7 +9,7 @@ function Posts() {
   const [post, setPost] = useState();
   const { register, handleSubmit, errors } = useForm();
   const [postList, setPostList] = useState();
-  const isLoading = useRef(false)
+  const [forceUpdate, setForceUpdate] = useState({})
 
   const registerOptions = {
     required: true,
@@ -19,17 +19,19 @@ function Posts() {
   const formSubmit = (data) => {
     const { post } = data
     setPost(post)
+    if (post && typeof post === 'string') {
+      fetch(`https://fast-cliffs-09680.herokuapp.com/posts/${post}`, { method: 'POST' })
+        .then(() => {
+          setForceUpdate({})
+        })
+    }
   }
 
   useEffect(() => {
-    isLoading.current = true
     const controller = new AbortController()
     const fetchData = async () => {
       let response;
       try {
-        if (post && typeof post === 'string') {
-          await fetch(`https://fast-cliffs-09680.herokuapp.com/posts/${post}`, { method: 'POST', signal: controller.signal })
-        }
         response = await fetch(`https://fast-cliffs-09680.herokuapp.com/posts`, { signal: controller.signal })
         if (!response.ok) {
           setPostList([])
@@ -42,15 +44,14 @@ function Posts() {
       }
     }
     fetchData();
-    isLoading.current = false
     return () => controller.abort()
-  }, [post])
+  }, [forceUpdate])
 
   const deletePost = (id) => {
     fetch(`https://fast-cliffs-09680.herokuapp.com/posts/${id}`, { method: 'DELETE' })
       .then(response => {
         if (response.status === 202) {
-          setPost({})
+          setForceUpdate({})
         }
       })
       .catch(console.error)
@@ -60,7 +61,7 @@ function Posts() {
     fetch(`https://fast-cliffs-09680.herokuapp.com/posts`, { method: 'DELETE' })
       .then(response => {
         if (response.status === 202) {
-          setPost({})
+          setForceUpdate({})
         }
       })
       .catch(console.error)
@@ -83,9 +84,7 @@ function Posts() {
         </div>
       </form>
       <hr />
-      {isLoading.current ? <div className="spinner-border pos" role="status">
-        <span className="sr-only">Loading...</span>
-        </div>: postList && postList.length !== 0 ? <PostListComponent list={postList} deletePost={deletePost} />:
+      {postList && postList.length !== 0 ? <PostListComponent list={postList} deletePost={deletePost} />:
         <h5>No post</h5>}
     </div>
   )
