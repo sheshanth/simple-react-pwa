@@ -19,7 +19,8 @@ function Posts() {
     pattern: /^\S*$/
   }
 
-  const formSubmit = async (data) => {
+  const formSubmit = async (data, e) => {
+    const postInputRef = e.target.querySelector('#post')
     const { post } = data
     setPost(post)
     if (post && typeof post === 'string') {
@@ -29,6 +30,8 @@ function Posts() {
           throw Error(internetDisconnected)
         }
         setForceUpdate({})
+        postInputRef.value = ''
+        postInputRef.blur()
       } catch (error) {
         if (error.message === failedToFetch) {
           window.alert(`${internetDisconnected}: request queued.`)
