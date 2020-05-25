@@ -6,12 +6,12 @@ import RepoList from '../repo-list/RepoList'
 
 function GithubHandlerSearch() {
 
-  const [ githubHandler, setGithubHandler ] = useState('')
+  const [ githubHandle, setGithubHandler ] = useState('')
   const { register, handleSubmit, errors} = useForm()
 
   const formSubmit = (data) => {
-    const { githubHandler } = data
-    setGithubHandler(githubHandler)
+    const { githubHandle } = data
+    setGithubHandler(githubHandle)
   }
 
   const registerOptions = {
@@ -23,14 +23,14 @@ function GithubHandlerSearch() {
     <div className="GithubHandlerSearch">
       <form onSubmit={handleSubmit(formSubmit)}>
         <div className="form-group">
-        <label htmlFor="githubHandler">Github Handler:</label>
-        <input type="text" className="form-control col-sm-12 col-md-5" defaultValue={githubHandler} 
-          ref={register(registerOptions)} id="githubHandler" name="githubHandler" placeholder="Enter Github Handler" />
-          { errors.githubHandler && <div className="text-danger">Github handler required</div> }
+        <label htmlFor="githubHandle">Github Handle:</label>
+        <input type="text" className="form-control col-sm-12 col-md-5" defaultValue={githubHandle} 
+          ref={register(registerOptions)} id="githubHandle" name="githubHandle" placeholder="Enter Github Handler" />
+          { errors.githubHandle && <div className="text-danger">Github handle required</div> }
         </div>
       </form>
       <hr/>
-      { githubHandler.length !==0? <RepoList githubHandler={githubHandler}/> : ''}
+      { githubHandle.length !==0? <RepoList githubHandle={githubHandle}/> : ''}
     </div>
   )
 }
