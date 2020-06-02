@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-function RepoList({ githubHandler }) {
+function RepoList({ githubHandle }) {
 
   const [repos, setRepos] = useState([]);
 
@@ -23,13 +23,13 @@ function RepoList({ githubHandler }) {
 
   useEffect(() => {
     const controller = new AbortController()
-    fetch(`https://api.github.com/users/${githubHandler}/repos`, { signal: controller.signal })
+    fetch(`https://api.github.com/users/${githubHandle}/repos`, { signal: controller.signal })
       .then(validateResponse)
       .then(responseAsJson)
       .then(setRepos)
       .catch(console.error)
     return () => controller.abort()
-  }, [githubHandler])
+  }, [githubHandle])
 
 
   return (
