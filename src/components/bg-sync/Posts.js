@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 
 import PostListComponent from './PostList';
@@ -39,12 +39,16 @@ function Posts() {
     inputRef.current.blur();
   }
 
-  useEffect(() => {
-    if(inputRef.current) {
+  const inputRefCallback = useCallback(() => {
+    if (inputRef.current) {
       register(inputRef.current, registerOptions)
       inputRef.current.focus();
     }
-  }, [])
+  }, [register, registerOptions])
+
+  useEffect(() => {
+    inputRefCallback()
+  }, [inputRefCallback])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -60,7 +64,7 @@ function Posts() {
         setPostList(data)
       } catch (error) {
         console.log(error)
-        if(error.message === failedToFetch) {
+        if (error.message === failedToFetch) {
           window.alert(`${internetDisconnected}: can't fetch.`)
         }
       }
