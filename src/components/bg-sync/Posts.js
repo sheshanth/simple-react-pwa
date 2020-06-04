@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 import PostListComponent from './PostList';
@@ -13,14 +13,14 @@ function Posts() {
   const { register, handleSubmit, errors } = useForm();
   const [postList, setPostList] = useState();
   const [forceUpdate, setForceUpdate] = useState({})
+  const inputRef = useRef();
 
   const registerOptions = {
     required: true,
     pattern: /^\S*$/
   }
 
-  const formSubmit = async (data, e) => {
-    const postInputRef = e.target.querySelector('#post')
+  const formSubmit = async (data) => {
     const { post } = data
     setPost(post)
     if (post && typeof post === 'string') {
@@ -30,15 +30,21 @@ function Posts() {
           throw Error(internetDisconnected)
         }
         setForceUpdate({})
-        postInputRef.value = ''
-        postInputRef.blur()
       } catch (error) {
         if (error.message === failedToFetch) {
           window.alert(`${internetDisconnected}: request queued.`)
         }
       }
     }
+    inputRef.current.blur();
   }
+
+  useEffect(() => {
+    if(inputRef.current) {
+      register(inputRef.current, registerOptions)
+      inputRef.current.focus();
+    }
+  }, [])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -98,7 +104,7 @@ function Posts() {
           <div className="col-sm-9">
             <label htmlFor="post">Post:</label>
             <input type="text" className="form-control col-sm-12 col-md-5" defaultValue={post}
-              ref={register(registerOptions)} id="post" name="post" placeholder="Enter post name" />
+              ref={inputRef} id="post" name="post" placeholder="Enter post name" />
             {errors.post && <div className="text-danger">Post required</div>}
           </div>
           <div className="col deleteAll">
